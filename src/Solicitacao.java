@@ -2,31 +2,45 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Solicitacao {
-
     private int protocolo;
     private String descricao;
-    private String localizacao;
     private String prioridade;
-    private boolean anonimo;
+    private Cidadao solicitante;
+    private List<HistoricoStatus> historico = new ArrayList<>();
 
-    private Categoria categoria;
-    private List<HistoricoStatus> historico;
+    public Solicitacao(int protocolo, String descricao, String prioridade, Cidadao solicitante) {
 
-    public Solicitacao(int protocolo, String descricao, String localizacao, String prioridade, boolean anonimo, Categoria categoria) {
+        if (descricao == null || descricao.length() < 10) {
+            throw new IllegalArgumentException("Descrição muito curta. Explique melhor o problema.");
+        }
+
         this.protocolo = protocolo;
         this.descricao = descricao;
-        this.localizacao = localizacao;
         this.prioridade = prioridade;
-        this.anonimo = anonimo;
-        this.categoria = categoria;
-        this.historico = new ArrayList<>();
+        this.solicitante = solicitante;
+    }
+
+    public void registrarMovimentacao(Status status, String comentario, String responsavel) {
+        historico.add(new HistoricoStatus(status, comentario, responsavel));
     }
 
     public int getProtocolo() {
         return protocolo;
     }
 
-    public void adicionarHistorico(HistoricoStatus h) {
-        historico.add(h);
+    public void imprimirRelatorio() {
+        System.out.println("\n====================================================");
+        System.out.println("DETALHES DO PROTOCOLO: #" + protocolo);
+        System.out.println("SOLICITANTE: " + solicitante.getIdentidadeParaExibicao());
+        System.out.println("DESCRIÇÃO: " + descricao);
+        System.out.println("PRIORIDADE: " + prioridade);
+        System.out.println("----------------------------------------------------");
+        System.out.println("HISTÓRICO DE ATENDIMENTO:");
+
+        for (HistoricoStatus h : historico) {
+            System.out.println(h);
+        }
+
+        System.out.println("====================================================");
     }
 }
