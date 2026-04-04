@@ -10,4 +10,6 @@ public class Cidadao extends Usuario {
     public boolean isAnonimo() {
         return anonimo;
     }
+
+
 }

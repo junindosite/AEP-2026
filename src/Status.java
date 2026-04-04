@@ -1,4 +1,7 @@
-package PACKAGE_NAME;
-
 public enum Status {
+    ABERTO,
+    TRIAGEM,
+    EM_EXECUCAO,
+    RESOLVIDO,
+    ENCERRADO
 }
