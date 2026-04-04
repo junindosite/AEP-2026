@@ -10,6 +10,10 @@ public class Cidadao extends Usuario {
     public boolean isAnonimo() {
         return anonimo;
     }
-
-
+    public String getIdentidadeParaExibicao() {
+        if (this.anonimo) {
+            return "USUÁRIO ANÔNIMO";
+        }
+        return getNome();
+    }
 }
