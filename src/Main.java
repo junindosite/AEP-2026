@@ -8,7 +8,11 @@ public class Main {
         ServicoSolicitacoes servico = new ServicoSolicitacoes();
 
         while (true) {
-            int tipo = escolherPerfil(scanner);
+            System.out.println("\n1 - Cidadão");
+            System.out.println("2 - Admin");
+            System.out.println("0 - Sair");
+
+            int tipo = scanner.nextInt();
 
             if (tipo == 1) {
                 menuCidadao(scanner, servico);
@@ -22,13 +26,11 @@ public class Main {
         scanner.close();
     }
 
-    public static int escolherPerfil(Scanner scanner) {
-        System.out.println("\n1 - Cidadão");
-        System.out.println("2 - Admin");
-        System.out.println("0 - Sair");
-        return scanner.nextInt();
-    }
-
+    // A função menuCidadao foi criada para organizar melhor o fluxo do programa.
+    // Antes, toda a lógica estava no main, dificultando leitura e manutenção.
+    // Foi aplicada a técnica de extração de método, separando a responsabilidade.
+    // Agora, essa função tem apenas uma responsabilidade: gerenciar ações do cidadão.
+    // Isso melhora organização, clareza e facilita futuras manutenções.
     public static void menuCidadao(Scanner scanner, ServicoSolicitacoes servico) {
 
         int op;

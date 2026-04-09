@@ -30,6 +30,11 @@ public class Solicitacao {
         return protocolo;
     }
 
+    // A função imprimirRelatorio foi aprimorada para melhorar clareza e controle de acesso.
+    // Foi adicionado o parâmetro booleano (isAdmin) para diferenciar tipos de usuários.
+    // Administradores visualizam dados completos (nome, CPF e email).
+    // Usuários comuns visualizam apenas dados limitados ou anonimizados.
+    // Essa abordagem evita duplicação de código e melhora a organização e segurança.
     public void imprimirRelatorio(boolean isAdmin) {
         System.out.println("\n====================================================");
         System.out.println("PROTOCOLO: #" + protocolo);

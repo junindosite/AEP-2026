@@ -5,6 +5,11 @@ public class ServicoSolicitacoes {
 
     private List<Solicitacao> repositorio = new ArrayList<>();
 
+    // A função novaSolicitacao centraliza a criação e registro das solicitações.
+    // Aplica encapsulamento, garantindo que toda solicitação seja adicionada corretamente.
+    // Também define automaticamente o status inicial da solicitação.
+    // Possui validação para evitar dados inválidos.
+    // Isso melhora a confiabilidade do sistema e facilita manutenção futura.
     public void novaSolicitacao(Solicitacao s) {
         if (s != null) {
             repositorio.add(s);
