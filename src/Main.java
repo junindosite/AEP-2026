@@ -1,31 +1,50 @@
 import java.util.Scanner;
 
 public class Main {
+
     public static void main(String[] args) {
 
         Scanner scanner = new Scanner(System.in);
         ServicoSolicitacoes servico = new ServicoSolicitacoes();
 
-        int opcao;
+        while (true) {
+            int tipo = escolherPerfil(scanner);
+
+            if (tipo == 1) {
+                menuCidadao(scanner, servico);
+            } else if (tipo == 2) {
+                menuAdmin(scanner, servico);
+            } else if (tipo == 0) {
+                break;
+            }
+        }
+
+        scanner.close();
+    }
+
+    public static int escolherPerfil(Scanner scanner) {
+        System.out.println("\n1 - Cidadão");
+        System.out.println("2 - Admin");
+        System.out.println("0 - Sair");
+        return scanner.nextInt();
+    }
+
+    public static void menuCidadao(Scanner scanner, ServicoSolicitacoes servico) {
+
+        int op;
 
         do {
-            System.out.println("\n====== SISTEMA DE SOLICITAÇÕES ======");
-            System.out.println("1 - Nova solicitação");
-            System.out.println("2 - Buscar por protocolo");
-            System.out.println("3 - Listar todas");
-            System.out.println("4 - Atualizar status");
+            System.out.println("\n1 - Nova solicitação");
+            System.out.println("2 - Buscar");
+            System.out.println("9 - Trocar perfil");
             System.out.println("0 - Sair");
-            System.out.print("Escolha: ");
 
-            opcao = scanner.nextInt();
+            op = scanner.nextInt();
             scanner.nextLine();
 
-            switch (opcao) {
-
+            switch (op) {
                 case 1:
-                    System.out.println("\n--- NOVA SOLICITAÇÃO ---");
-
-                    System.out.print("Digite seu nome: ");
+                    System.out.print("Nome: ");
                     String nome = scanner.nextLine();
 
                     System.out.print("CPF: ");
@@ -34,111 +53,108 @@ public class Main {
                     System.out.print("Email: ");
                     String email = scanner.nextLine();
 
-                    System.out.print("Deseja ser anônimo? (s/n): ");
+                    System.out.print("Anônimo? (s/n): ");
                     boolean anonimo = scanner.nextLine().equalsIgnoreCase("s");
 
-                    Cidadao cidadao = new Cidadao(nome, cpf, email, anonimo);
+                    System.out.print("Rua do problema: ");
+                    String rua = scanner.nextLine();
 
-                    System.out.println("\nDescreva o problema (ex: poste sem luz, buraco na rua):");
-                    String descricao = scanner.nextLine();
+                    System.out.print("Descrição: ");
+                    String desc = scanner.nextLine();
 
-                    System.out.print("Prioridade (BAIXA / MEDIA / ALTA): ");
-                    String prioridade = scanner.nextLine();
+                    System.out.println("1-BAIXA 2-MEDIA 3-ALTA");
+                    int p = scanner.nextInt();
+                    scanner.nextLine();
+
+                    String prioridade = (p == 1) ? "BAIXA" : (p == 2) ? "MEDIA" : "ALTA";
 
                     int protocolo = (int) (Math.random() * 1000);
 
-                    try {
-                        Solicitacao s = new Solicitacao(protocolo, descricao, prioridade, cidadao);
-                        servico.novaSolicitacao(s);
+                    Solicitacao s = new Solicitacao(protocolo, desc, prioridade, rua,
+                            new Cidadao(nome, cpf, email, anonimo));
 
-                        System.out.println("Solicitação criada com sucesso!");
-                        System.out.println("Protocolo: " + protocolo);
+                    servico.novaSolicitacao(s);
 
-                    } catch (IllegalArgumentException e) {
-                        System.out.println("Erro: " + e.getMessage());
-                    }
-
+                    System.out.println("Protocolo: " + protocolo);
                     break;
 
                 case 2:
-                    System.out.print("Digite o protocolo: ");
-                    int p = scanner.nextInt();
+                    System.out.print("Protocolo: ");
+                    int busca = scanner.nextInt();
 
-                    Solicitacao encontrada = servico.buscarPorProtocolo(p);
+                    Solicitacao res = servico.buscarPorProtocolo(busca);
 
-                    if (encontrada != null) {
-                        encontrada.imprimirRelatorio();
+                    if (res != null) {
+                        res.imprimirRelatorio(false);
                     } else {
-                        System.out.println("Protocolo não encontrado.");
+                        System.out.println("Não encontrado");
                     }
-
                     break;
 
-                case 3:
-                    servico.listarSolicitacoes();
-                    break;
-
-                case 4:
-                    System.out.print("Digite o protocolo: ");
-                    int protocoloAtualizar = scanner.nextInt();
-                    scanner.nextLine();
-
-                    Solicitacao solicitacao = servico.buscarPorProtocolo(protocoloAtualizar);
-
-                    if (solicitacao != null) {
-
-                        System.out.println("Escolha o novo status:");
-                        System.out.println("1 - TRIAGEM");
-                        System.out.println("2 - EM_EXECUCAO");
-                        System.out.println("3 - RESOLVIDO");
-                        System.out.println("4 - ENCERRADO");
-
-                        int escolhaStatus = scanner.nextInt();
-                        scanner.nextLine();
-
-                        Status novoStatus = null;
-
-                        switch (escolhaStatus) {
-                            case 1:
-                                novoStatus = Status.TRIAGEM;
-                                break;
-                            case 2:
-                                novoStatus = Status.EM_EXECUCAO;
-                                break;
-                            case 3:
-                                novoStatus = Status.RESOLVIDO;
-                                break;
-                            case 4:
-                                novoStatus = Status.ENCERRADO;
-                                break;
-                            default:
-                                System.out.println("Status inválido!");
-                                break;
-                        }
-
-                        System.out.print("Digite um comentário: ");
-                        String comentario = scanner.nextLine();
-
-                        solicitacao.registrarMovimentacao(novoStatus, comentario, "Atendente");
-
-                        System.out.println("Status atualizado com sucesso!");
-
-                    } else {
-                        System.out.println("Protocolo não encontrado.");
-                    }
-
-                    break;
+                case 9:
+                    return;
 
                 case 0:
-                    System.out.println("Encerrando sistema...");
-                    break;
-
-                default:
-                    System.out.println("Opção inválida!");
+                    System.exit(0);
             }
 
-        } while (opcao != 0);
+        } while (true);
+    }
 
-        scanner.close();
+    public static void menuAdmin(Scanner scanner, ServicoSolicitacoes servico) {
+
+        int op;
+
+        do {
+            System.out.println("\n1 - Listar");
+            System.out.println("2 - Atualizar status");
+            System.out.println("9 - Trocar perfil");
+            System.out.println("0 - Sair");
+
+            op = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (op) {
+
+                case 1:
+                    servico.listarSolicitacoes(true);
+                    break;
+
+                case 2:
+                    System.out.print("Protocolo: ");
+                    int protocolo = scanner.nextInt();
+                    scanner.nextLine();
+
+                    Solicitacao s = servico.buscarPorProtocolo(protocolo);
+
+                    if (s != null) {
+                        System.out.println("1-TRIAGEM 2-EM_EXECUCAO 3-RESOLVIDO 4-ENCERRADO");
+                        int escolha = scanner.nextInt();
+                        scanner.nextLine();
+
+                        Status status = null;
+
+                        switch (escolha) {
+                            case 1: status = Status.TRIAGEM; break;
+                            case 2: status = Status.EM_EXECUCAO; break;
+                            case 3: status = Status.RESOLVIDO; break;
+                            case 4: status = Status.ENCERRADO; break;
+                        }
+
+                        System.out.print("Comentário: ");
+                        String comentario = scanner.nextLine();
+
+                        s.registrarMovimentacao(status, comentario, "Admin");
+                    }
+                    break;
+
+                case 9:
+                    return;
+
+                case 0:
+                    System.exit(0);
+            }
+
+        } while (true);
     }
 }

@@ -12,4 +12,12 @@ public abstract class Usuario {
     public String getNome() {
         return nome;
     }
+
+    public String getCpf() {
+        return cpf;
+    }
+
+    public String getEmail() {
+        return email;
+    }
 }

@@ -23,9 +23,9 @@ public class ServicoSolicitacoes {
                 .orElse(null);
     }
 
-    public void listarSolicitacoes() {
+    public void listarSolicitacoes(boolean isAdmin) {
         for (Solicitacao s : repositorio) {
-            s.imprimirRelatorio();
+            s.imprimirRelatorio(isAdmin);
         }
     }
 }
